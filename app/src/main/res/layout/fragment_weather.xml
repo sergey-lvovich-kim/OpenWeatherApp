@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swipe_refresh"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".view.screens.fragments.WeatherFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/city_name_text_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/open_search_btn"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/xxl_margin"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/l_text" />
+
+        <TextView
+            android:id="@+id/temperature_text_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/city_name_text_view"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/l_margin"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/xl_text"/>
+
+        <TextView
+            android:id="@+id/description_text_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/temperature_text_view"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/l_margin"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/l_text"/>
+
+        <TextView
+            android:id="@+id/humidity_text_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/description_text_view"
+            app:layout_constraintStart_toStartOf="@id/description_text_view"
+            app:layout_constraintEnd_toEndOf="@id/description_text_view"
+            android:layout_marginTop="@dimen/m_margin"
+            android:gravity="center_horizontal"
+            android:textColor="@color/black"
+            android:textSize="@dimen/m_text"/>
+
+        <TextView
+            android:id="@+id/pressure_text_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/humidity_text_view"
+            app:layout_constraintStart_toStartOf="@id/description_text_view"
+            app:layout_constraintEnd_toEndOf="@id/description_text_view"
+            android:layout_marginTop="@dimen/m_margin"
+            android:gravity="center_horizontal"
+            android:textColor="@color/black"
+            android:textSize="@dimen/m_text"/>
+
+        <ImageView
+            android:id="@+id/weather_image_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/humidity_text_view"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintDimensionRatio="1:1"
+            android:layout_marginTop="@dimen/m_margin"
+            android:contentDescription="@string/app_name"/>
+
+        <Button
+            android:id="@+id/open_search_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/s_margin"
+            android:layout_marginEnd="@dimen/m_margin"
+            android:padding="@dimen/m_margin"
+            android:text="@string/search"
+            android:textAllCaps="false"
+            android:textSize="@dimen/m_text"
+            android:textColor="@color/white"/>
+
+        <CheckBox
+            android:id="@+id/add_to_favs_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginBottom="@dimen/l_margin"
+            android:layout_marginStart="@dimen/l_margin"
+            android:contentDescription="@string/app_name"
+            android:button="@null"
+            android:gravity="center"
+            android:background="@drawable/ic_star"/>
+
+        <Button
+            android:id="@+id/favorite_cities_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/add_to_favs_checkbox"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="@dimen/m_margin"
+            android:padding="@dimen/m_margin"
+            android:text="@string/favorites"
+            android:textAllCaps="false"
+            android:textSize="@dimen/m_text"
+            android:textColor="@color/white"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

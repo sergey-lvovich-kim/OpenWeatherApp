@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">OpenWeather</string>
+    <string name="temperature_degrees">%1$s %2$s</string>
+    <string name="humidity">Humidity: %1$s \%%</string>
+    <string name="pressure">Pressure: %s atm</string>
+    <string name="search">Search</string>
+    <string name="favorites">Favorites</string>
+    <string name="permission_need_explanatory_dialog_title">Enable location access</string>
+    <string name="permission_need_explanatory_dialog_message">To be able to get weather data from your current position, please, enable access to GPS</string>
+    <string name="dialog_positive_btn_text">Ok</string>
+    <string name="dialog_negative_btn_text">Cancel</string>
+    <string name="gps_need_explanator_title">Turn on gps</string>
+    <string name="gps_need_explanatory_dialog_message">To get last weather data, please, turn on gps in settings</string>
+    <string name="open_settings_btn_text">Open settings</string>
+    <string name="api_error_title">Error communicating with server</string>
+    <string name="api_error_message">Something went wrong when trying to fetch data from server</string>
+    <string name="search_city">Search city by name</string>
+</resources>

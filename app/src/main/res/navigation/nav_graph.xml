@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/weatherFragment">
+
+    <fragment
+        android:id="@+id/weatherFragment"
+        android:name="com.mikyegresl.openweather.view.screens.fragments.WeatherFragment"
+        android:label="fragment_weather"
+        tools:layout="@layout/fragment_weather" >
+        <action
+            android:id="@+id/action_weatherFragment_to_searchCityFragment"
+            app:destination="@id/searchCityFragment" />
+        <action
+            android:id="@+id/action_weatherFragment_to_favoriteCitiesFragment"
+            app:destination="@id/favoriteCitiesFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/favoriteCitiesFragment"
+        android:name="com.mikyegresl.openweather.view.screens.fragments.SavedCitiesFragment"
+        android:label="fragment_saved_cities"
+        tools:layout="@layout/fragment_favorite_cities" >
+        <action
+            android:id="@+id/action_favoriteCitiesFragment_to_weatherFragment"
+            app:destination="@id/weatherFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchCityFragment"
+        android:name="com.mikyegresl.openweather.view.screens.fragments.SearchCityFragment"
+        android:label="fragment_search_city"
+        tools:layout="@layout/fragment_search_city" >
+        <action
+            android:id="@+id/action_searchCityFragment_to_weatherFragment"
+            app:destination="@id/weatherFragment" />
+    </fragment>
+</navigation>

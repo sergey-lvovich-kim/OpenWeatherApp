@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".view.screens.fragments.SearchCityFragment">
+
+    <EditText
+        android:id="@+id/search_city_edit_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginHorizontal="@dimen/l_margin"
+        android:layout_marginTop="@dimen/xl_margin"
+        android:paddingVertical="@dimen/m_margin"
+        android:paddingHorizontal="@dimen/m_margin"
+        android:inputType="textCapWords"
+        android:background="@drawable/bg_rounded_grey"
+        android:fontFamily="@font/geometria_medium"
+        android:hint="@string/search_city"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
+        android:textSize="@dimen/l_text"
+        android:drawableStart="@drawable/ic_search"
+        android:autofillHints="@string/search_city" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/searched_cities_recycler_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/search_city_edit_text"
+        app:layout_constraintStart_toStartOf="@id/search_city_edit_text"
+        app:layout_constraintEnd_toEndOf="@id/search_city_edit_text"
+        tools:listitem="@layout/city_item"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
