@@ -12,6 +12,7 @@ import com.mikyegresl.openweather.data.model.Point
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import java.io.InputStream
 import java.io.InputStreamReader
@@ -20,6 +21,38 @@ import javax.inject.Inject
 class CitiesRepositoryImpl @Inject constructor(
     private val citiesDao: CitiesDao
 ): CitiesRepository {
+    private val gson = Gson()
+    private val cityType = object: TypeToken<City>() {}.type
+    private lateinit var reader: JsonReader
+
+    private fun readCitiesFromFile(inputStream: InputStream): Observable<List<City>> {
+        return Observable.create { subscriber ->
+            val tempBuffer = mutableListOf<City>()
+
+            try {
+                reader = JsonReader(InputStreamReader(inputStream))
+                reader.beginArray()
+
+                while (reader.hasNext()) {
+                    tempBuffer.add(gson.fromJson(reader, cityType))
+
+                    if (tempBuffer.size >= Database.BUFFER_SIZE) {
+                        subscriber.onNext(tempBuffer)
+                        tempBuffer.clear()
+                    }
+                }
+            }
+            catch (t: Throwable) {
+                subscriber.onError(t)
+            }
+            finally {
+                tempBuffer.clear()
+                reader.close()
+                subscriber.onComplete()
+            }
+        }
+    }
+
     override fun observeCities(): LiveData<List<City>> {
         return citiesDao.observeCities()
     }
@@ -33,44 +66,17 @@ class CitiesRepositoryImpl @Inject constructor(
     }
 
     override fun insertCities(inputStream: InputStream): Completable {
-        return Completable.create {
-            val cityType = object: TypeToken<City>() {}.type
-            val tempBuffer = mutableListOf<City>()
-            val gson = Gson()
-            var reader: JsonReader? = null
-
-            try {
-                reader = JsonReader(
-                    InputStreamReader(inputStream)
-                )
-                reader.beginArray()
-
-                while (reader.hasNext()) {
-                    tempBuffer.add(gson.fromJson(reader, cityType))
-
-                    if (tempBuffer.size > Database.BUFFER_SIZE) {
-                        citiesDao.insertCities(tempBuffer)
-                        tempBuffer.clear()
-                    }
-                }
+        return readCitiesFromFile(inputStream)
+            .flatMapCompletable { cityList ->
+                citiesDao.insertCities(cityList)
             }
-            finally {
-                tempBuffer.clear()
-                reader?.close()
-            }
-        }
     }
 
     override fun searchCityByName(name: String): LiveData<List<City>> {
         return citiesDao.searchCityByName(name)
     }
 
-    override fun searchCityByLocation(location: Point): LiveData<City> {
-        return citiesDao.searchCityByLocation(location)
+    override fun searchCityById(id: String): Observable<City> {
+        return citiesDao.searchCityById(id).toObservable()
     }
-
-    override fun searchCityById(id: String): LiveData<City> {
-        return citiesDao.searchCityById(id)
-    }
-
 }

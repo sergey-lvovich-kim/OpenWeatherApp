@@ -2,6 +2,7 @@ package com.mikyegresl.openweather.viewmodels
 
 import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
@@ -22,16 +23,29 @@ class SearchCityViewModel @Inject constructor(
     private val compositeDisposable = CompositeDisposable()
 
     private val _dataLoading = MutableLiveData<Boolean>()
-    private val _citiesInserted = MutableLiveData<Boolean>()
-    private val _currentCityId = MutableLiveData<String>()
-    private val _currentSearchList = MutableLiveData<List<City>>()
+    private val _searchCityName = MutableLiveData<String>()
+    val _currentCityList = MediatorLiveData<List<City>>()
 
     val dataLoading: LiveData<Boolean> = _dataLoading
-    val citiesInserted: LiveData<Boolean> = _citiesInserted
+    val currentCityList: LiveData<List<City>> = _currentCityList
 
+    init {
+        _currentCityList.addSource(_searchCityName) {
+            getCityListByName(it)
+        }
+    }
 
+    private fun getCityListByName(query: String): LiveData<List<City>> {
+        return citiesRepository.searchCityByName(query)
+    }
 
     fun stop() {
         compositeDisposable.clear()
     }
+
+    fun searchCity(query: String) {
+        _searchCityName.value = query
+    }
 }
+
+private const val TAG = "SearchCityViewModel"

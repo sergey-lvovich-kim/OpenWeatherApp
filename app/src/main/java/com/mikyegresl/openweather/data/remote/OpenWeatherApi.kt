@@ -10,4 +10,9 @@ interface OpenWeatherApi {
     @GET("weather?appid=${Constants.API_KEY}&units=metric")
     fun fetchCurrentWeatherDataByCityId(
         @Query("q") cityId: String): Single<Response<WeatherDataResponseSchema>>
+
+    @GET("weather?appid=${Constants.API_KEY}&units=metric")
+    fun fetchCurrentWeatherDataByCoordinates(
+        @Query("lon") lon: Double,
+        @Query("lat") lat: Double): Single<Response<WeatherDataResponseSchema>>
 }

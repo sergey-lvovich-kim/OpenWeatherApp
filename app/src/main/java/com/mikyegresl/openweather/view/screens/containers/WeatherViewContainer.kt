@@ -8,6 +8,7 @@ import android.widget.CheckBox
 import android.widget.TextView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.mikyegresl.openweather.R
+import com.mikyegresl.openweather.data.model.Weather
 import com.mikyegresl.openweather.view.common.BaseViewContainer
 
 class WeatherViewContainer(
@@ -65,16 +66,11 @@ class WeatherViewContainer(
         cityNameTextView.text = cityName
     }
 
-    fun bindWeatherData(
-        description: String,
-        temp: Double,
-        humidity: Double,
-        pressure: Double
-    ) {
-        weatherDescriptionTextView.text = description
-        temperatureTextView.text = context.getString(R.string.temperature_degrees, temp.toString(), "\u00B0")
-        humidityTextView.text = context.getString(R.string.humidity, humidity.toString())
-        pressureTextView.text = context.getString(R.string.pressure, pressure.toString())
+    fun bindWeatherData(weather: Weather) {
+        weatherDescriptionTextView.text = weather.description
+        temperatureTextView.text = context.getString(R.string.temperature_degrees, weather.temperature.toString(), "\u00B0")
+        humidityTextView.text = context.getString(R.string.humidity, weather.humidity.toString())
+        pressureTextView.text = context.getString(R.string.pressure, weather.pressure.toString())
     }
 
     fun bindIsFavorite(isFavorite: Boolean) {

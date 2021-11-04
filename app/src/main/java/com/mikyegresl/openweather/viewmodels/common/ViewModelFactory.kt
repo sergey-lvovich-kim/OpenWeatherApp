@@ -2,6 +2,7 @@ package com.mikyegresl.openweather.viewmodels.common
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.mikyegresl.openweather.data.local.Prefs
 import com.mikyegresl.openweather.viewmodels.DisplayWeatherViewModel
 import com.mikyegresl.openweather.viewmodels.SearchCityViewModel
 import javax.inject.Inject

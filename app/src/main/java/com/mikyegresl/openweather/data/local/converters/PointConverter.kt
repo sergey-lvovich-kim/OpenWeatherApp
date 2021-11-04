@@ -14,6 +14,6 @@ class PointConverter {
 
     @TypeConverter
     fun toPoint(value: Point): String {
-        return "${value.latitude};${value.longitude}"
+        return "${value.longitude};${value.latitude}"
     }
 }

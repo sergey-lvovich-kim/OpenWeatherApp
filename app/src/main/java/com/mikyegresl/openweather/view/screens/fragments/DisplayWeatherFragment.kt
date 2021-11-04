@@ -5,10 +5,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.mikyegresl.openweather.data.local.Database
 import com.mikyegresl.openweather.data.local.Prefs
+import com.mikyegresl.openweather.data.model.Point
 import com.mikyegresl.openweather.data.model.WeatherResult
 import com.mikyegresl.openweather.view.screens.containers.WeatherViewContainer
 import com.mikyegresl.openweather.view.common.BaseFragment
@@ -16,13 +18,18 @@ import com.mikyegresl.openweather.view.common.ViewContainerFactory
 import com.mikyegresl.openweather.view.screens.dialogs.DialogsNavigator
 import com.mikyegresl.openweather.viewmodels.DisplayWeatherViewModel
 import com.mikyegresl.openweather.viewmodels.common.ViewModelFactory
+import io.reactivex.Observable
+import io.reactivex.ObservableOnSubscribe
+import io.reactivex.Observer
+import io.reactivex.disposables.Disposable
+import org.reactivestreams.Subscriber
+import org.reactivestreams.Subscription
 import javax.inject.Inject
 
 class WeatherFragment : BaseFragment(), WeatherViewContainer.Listener {
     @Inject lateinit var viewContainerFactory: ViewContainerFactory
     @Inject lateinit var dialogsNavigator: DialogsNavigator
     @Inject lateinit var viewModelFactory: ViewModelFactory
-    @Inject lateinit var prefs: Prefs
 
     private lateinit var viewContainer: WeatherViewContainer
 
@@ -33,17 +40,16 @@ class WeatherFragment : BaseFragment(), WeatherViewContainer.Listener {
 
         presentationComponent.inject(this)
 
-        viewModel = ViewModelProvider(requireActivity(), viewModelFactory).get(DisplayWeatherViewModel::class.java)
+        viewModel = ViewModelProvider(
+            requireActivity(),
+            viewModelFactory
+        ).get(DisplayWeatherViewModel::class.java)
     }
 
     override fun onStart() {
         super.onStart()
 
-        val citiesInserted = prefs.getBoolean(Prefs.CITIES_INSERTED)
-
-        Log.i(DisplayWeatherViewModel::class.qualifiedName, "citiesInserted=$citiesInserted")
-
-        viewModel.saveCities(citiesInserted,requireContext().assets.open(Database.CITIES_FILENAME))
+        viewModel.saveCities(requireContext().assets.open(Database.CITIES_FILENAME))
         viewContainer.registerListener(this)
     }
 
@@ -65,8 +71,8 @@ class WeatherFragment : BaseFragment(), WeatherViewContainer.Listener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.dataLoading.observe(viewLifecycleOwner) {
-            if (it) {
+        viewModel.dataLoading.observe(viewLifecycleOwner) { dataLoading ->
+            if (dataLoading) {
                 viewContainer.showProgressIndication()
             }
             else {
@@ -74,52 +80,43 @@ class WeatherFragment : BaseFragment(), WeatherViewContainer.Listener {
             }
         }
 
-        viewModel.citiesInserted.observe(viewLifecycleOwner) {
-            prefs.putBoolean(Prefs.CITIES_INSERTED, it)
-        }
-
-        viewModel.weatherData.observe(viewLifecycleOwner) { weatherResult ->
+        viewModel.fetchWeatherResult.observe(viewLifecycleOwner) { weatherResult ->
             when (weatherResult) {
-//                is WeatherResult.Success -> {
-//                    viewContainer.bindWeatherData(
-//                        weatherResult.weather.description,
-//                        weatherResult.weather.temperature,
-//                        weatherResult.weather.humidity,
-//                        weatherResult.weather.pressure)
-//                }
+                is WeatherResult.Success -> {
+                    viewContainer.bindWeatherData(weatherResult.weather)
+                }
                 is WeatherResult.Failure -> {
                     dialogsNavigator.showApiErrorDialog()
                 }
             }
         }
 
-        viewModel.currentLocation.observe(viewLifecycleOwner) {
-        }
-
-        viewModel.getCityData().observe(viewLifecycleOwner) {
-            viewContainer.bindCityName(it.name)
-            viewContainer.bindIsFavorite(it.isFavorite)
+        viewModel.currentCity.observe(viewLifecycleOwner) { city ->
+            viewContainer.bindCityName(city.name)
+            viewContainer.bindIsFavorite(city.isFavorite)
         }
     }
 
     companion object {
         @JvmStatic
         fun newInstance() = WeatherFragment()
+
+        private const val TAG = "DisplayWeatherFragment"
     }
 
     override fun onRefreshClicked() {
-        viewModel.fetchWeatherData()
+        viewModel.refreshWeatherData()
     }
 
     override fun onSearchClicked() {
         findNavController().navigate(
-            WeatherFragmentDirections.actionWeatherFragmentToFavoriteCitiesFragment()
+            WeatherFragmentDirections.actionWeatherFragmentToSearchCityFragment()
         )
     }
 
     override fun onFavoritesClicked() {
         findNavController().navigate(
-            WeatherFragmentDirections.actionWeatherFragmentToSearchCityFragment()
+            WeatherFragmentDirections.actionWeatherFragmentToFavoriteCitiesFragment()
         )
     }
 
@@ -129,9 +126,5 @@ class WeatherFragment : BaseFragment(), WeatherViewContainer.Listener {
             return
         }
         viewModel.removeFromFavorites()
-    }
-
-    private fun fetchWeatherData() {
-        viewModel.fetchWeatherData()
     }
 }

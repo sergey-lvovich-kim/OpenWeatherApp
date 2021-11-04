@@ -12,8 +12,8 @@ import io.reactivex.Single
 
 @Dao
 interface CitiesDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertCities(cities: List<City>)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insertCities(cities: List<City>): Completable
 
     @Query("SELECT * FROM cities ORDER BY name ASC")
     fun observeCities(): LiveData<List<City>>
@@ -25,8 +25,11 @@ interface CitiesDao {
     fun searchCityByName(name: String): LiveData<List<City>>
 
     @Query("SELECT * FROM cities WHERE id LIKE '%' || :id || '%' LIMIT 1")
-    fun searchCityById(id: String): LiveData<City>
+    fun searchCityById(id: String): Single<City>
 
     @Query("SELECT * FROM cities WHERE point == :point LIMIT 1")
     fun searchCityByLocation(point: Point): LiveData<City>
+
+    @Query("SELECT id FROM cities WHERE point == :point LIMIT 1")
+    fun searchCityIdByLocation(point: Point): LiveData<String>
 }

@@ -1,13 +1,7 @@
 package com.mikyegresl.openweather.di
 
 import android.app.Application
-import android.util.Log
 import androidx.room.Room
-import androidx.room.RoomDatabase
-import androidx.sqlite.db.SupportSQLiteDatabase
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import com.google.gson.stream.JsonReader
 import com.mikyegresl.openweather.Constants
 import com.mikyegresl.openweather.data.CitiesRepository
 import com.mikyegresl.openweather.data.CitiesRepositoryImpl
@@ -17,7 +11,6 @@ import com.mikyegresl.openweather.data.local.CitiesDao
 import com.mikyegresl.openweather.data.local.Database
 import com.mikyegresl.openweather.data.local.Prefs
 import com.mikyegresl.openweather.data.local.WeatherDao
-import com.mikyegresl.openweather.data.model.City
 import com.mikyegresl.openweather.data.remote.OpenWeatherApi
 import com.mikyegresl.openweather.di.scopes.AppScope
 import dagger.Module
@@ -27,7 +20,6 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import java.io.InputStreamReader
 
 @Module
 class AppModule(private val application: Application) {

@@ -3,6 +3,7 @@ package com.mikyegresl.openweather.view.screens
 import android.annotation.SuppressLint
 import android.location.Location
 import android.os.Bundle
+import android.util.Log
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
@@ -23,7 +24,6 @@ class MainActivity : BaseActivity(), OnCompleteListener<Location> {
     @Inject lateinit var viewModelFactory: ViewModelFactory
 
     private lateinit var weatherViewModel: DisplayWeatherViewModel
-//    private lateinit var citiesViewModel: CitiesViewModel
 
     private var location = Point()
 
@@ -34,13 +34,10 @@ class MainActivity : BaseActivity(), OnCompleteListener<Location> {
         presentationComponent.inject(this)
 
         weatherViewModel = ViewModelProvider(this, viewModelFactory).get(DisplayWeatherViewModel::class.java)
-//        citiesViewModel = ViewModelProvider(this, viewModelFactory).get(CitiesViewModel::class.java)
     }
 
     override fun onStart() {
         super.onStart()
-
-
 
         when (locationPermissionManager.checkLocationPermission()) {
             LocationPermissionManager.PermissionEvent.LOCATION_DISABLED ->
