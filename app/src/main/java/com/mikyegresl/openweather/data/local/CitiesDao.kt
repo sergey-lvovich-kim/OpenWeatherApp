@@ -22,7 +22,7 @@ interface CitiesDao {
     fun setCityFavorite(id: String, isFavorite: Boolean): Completable
 
     @Query("SELECT * FROM cities WHERE name LIKE '%' || :name || '%'")
-    fun searchCityByName(name: String): LiveData<List<City>>
+    fun searchCityByName(name: String): Single<List<City>>
 
     @Query("SELECT * FROM cities WHERE id LIKE '%' || :id || '%' LIMIT 1")
     fun searchCityById(id: String): Single<City>

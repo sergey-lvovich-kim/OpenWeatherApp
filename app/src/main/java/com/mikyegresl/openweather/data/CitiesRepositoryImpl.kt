@@ -72,8 +72,8 @@ class CitiesRepositoryImpl @Inject constructor(
             }
     }
 
-    override fun searchCityByName(name: String): LiveData<List<City>> {
-        return citiesDao.searchCityByName(name)
+    override fun searchCityByName(name: String): Observable<List<City>> {
+        return citiesDao.searchCityByName(name).toObservable()
     }
 
     override fun searchCityById(id: String): Observable<City> {
